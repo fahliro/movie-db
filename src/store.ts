@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit"
-import appReducer from "./slices/App"
 import counterReducer from "./slices/Counter"
+import moviesReducer from "./slices/Movies"
 
 export const store = configureStore({
     reducer: {
         counter: counterReducer,
-        app: appReducer,
+        movies: moviesReducer
     }
 })
 

@@ -1,7 +1,6 @@
 export interface ICarousel {
-    image: string;
+    backdrop_path: string;
     title: string;
-    subTitle: string;
 }
 
 export interface IInitialState {

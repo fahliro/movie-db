@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import Card from "../components/Card";
 import Header from "../components/Header";
 
 const WatchedList = (): JSX.Element => {
@@ -22,10 +21,10 @@ const WatchedList = (): JSX.Element => {
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 md:gap-5 gap-4">
+          {/* <Card />
           <Card />
           <Card />
-          <Card />
-          <Card />
+          <Card /> */}
         </div>
       </div>
     </>

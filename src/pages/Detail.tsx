@@ -1,28 +1,52 @@
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
 import Carousel from "../components/Carousel";
 import Favorite from "../components/Favorite";
 import Rating from "../components/Rating";
 import Review from "../components/Review";
+import { IMovie } from "../interfaces/Movies";
+import { addMovie } from "../slices/Movies";
+import { RootState } from "../store";
+import { instance } from "../utils/api";
 
 const Detail = (): JSX.Element => {
+  const movie = useSelector((state: RootState) => state.movies.movie);
+  const { title, backdrop_path, overview } = movie;
+
   const dispatch = useDispatch();
+
+  const { id } = useParams();
+
+  const getMovie = (): void => {
+    instance.get(`/movie/${id}`).then((response) => {
+      const { id, title, backdrop_path, poster_path, overview, release_date } =
+        response.data;
+
+      const item: IMovie = {
+        id,
+        title,
+        backdrop_path,
+        poster_path,
+        overview,
+        release_date,
+      };
+
+      dispatch(addMovie({ movie: item }));
+    });
+  };
+
+  useEffect(() => getMovie(), [id]);
 
   return (
     <>
-      <Carousel
-        title="John Wick 3:"
-        subTitle="Parabellum"
-        image="https://images7.alphacoders.com/101/1012576.jpg"
-      />
+      <Carousel title={title} backdrop_path={backdrop_path} />
       <div className="md:p-10 md:mb-32 md:mx-0 md:mt-0 mx-5 mt-5 pb-28">
         <div className="grid grid-cols-2 mb-8 md:mb-10">
           <div className="grid justify-start items-end">
             <Link to="/">
-              <div
-                // onClick={() => dispatch(reset())}
-                className="bg-slate-50 px-10 py-2 rounded-lg md:hover:bg-slate-100 transition-all"
-              >
+              <div className="bg-slate-50 px-10 py-2 rounded-lg md:hover:bg-slate-100 transition-all">
                 Back
               </div>
             </Link>
@@ -31,11 +55,7 @@ const Detail = (): JSX.Element => {
             <Favorite />
           </div>
         </div>
-        <div className="bg-slate-50 rounded-lg p-10 mb-5">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut numquam
-          modi odit pariatur minus eum qui molestias, culpa, maiores laudantium
-          rerum officia quaerat. Harum et quae quam iusto esse vitae.
-        </div>
+        <div className="bg-slate-50 rounded-lg p-10 mb-5">{overview}</div>
         <div className="text-sm mb-5 grid grid-flow-col items-center justify-start">
           <Rating />
         </div>

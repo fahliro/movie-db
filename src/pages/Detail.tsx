@@ -17,13 +17,16 @@ const Detail = (): JSX.Element => {
 
   const dispatch = useDispatch();
 
-  const reviews = useSelector((state: RootState) => state.movies.reviews);
-
   const { id } = useParams();
+  const idNumber = Number(id);
+
+  const items = useSelector((state: RootState) => state.movies.reviews);
+  const reviews = id
+    ? items.filter((item: IReview) => item.id === idNumber)
+    : [];
 
   const watched = useSelector((state: RootState) => state.movies.watched);
-  const dd = Number(id);
-  const isWatched = id ? watched.includes(dd) : false;
+  const isWatched = id ? watched.includes(idNumber) : false;
 
   const [textReview, setTextReview] = useState<string>("");
 
@@ -53,7 +56,7 @@ const Detail = (): JSX.Element => {
         addReview({
           review: textReview,
           date: new Date().toISOString(),
-          id,
+          id: idNumber,
           idReview: Math.random(),
         })
       );

@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import Carousel from "../components/Carousel";
 import Favorite from "../components/Favorite";
 import Rating from "../components/Rating";
 import Review from "../components/Review";
-import { IMovie } from "../interfaces/Movies";
-import { addMovie } from "../slices/Movies";
+import { IMovie, IReview } from "../interfaces/Movies";
+import { addMovie, addReview } from "../slices/Movies";
 import { RootState } from "../store";
 import { instance } from "../utils/api";
 
@@ -17,7 +17,15 @@ const Detail = (): JSX.Element => {
 
   const dispatch = useDispatch();
 
+  const reviews = useSelector((state: RootState) => state.movies.reviews);
+
   const { id } = useParams();
+
+  const watched = useSelector((state: RootState) => state.movies.watched);
+  const dd = Number(id);
+  const isWatched = id ? watched.includes(dd) : false;
+
+  const [textReview, setTextReview] = useState<string>("");
 
   const getMovie = (): void => {
     instance.get(`/movie/${id}`).then((response) => {
@@ -39,6 +47,20 @@ const Detail = (): JSX.Element => {
 
   useEffect(() => getMovie(), [id]);
 
+  const handleAddReview = (): void => {
+    if (textReview) {
+      dispatch(
+        addReview({
+          review: textReview,
+          date: new Date().toISOString(),
+          id,
+          idReview: Math.random(),
+        })
+      );
+      setTextReview("");
+    }
+  };
+
   return (
     <>
       <Carousel title={title} backdrop_path={backdrop_path} />
@@ -52,28 +74,44 @@ const Detail = (): JSX.Element => {
             </Link>
           </div>
           <div className="grid justify-end items-center">
-            <Favorite />
+            {id && <Favorite id={Number(id)} />}
           </div>
         </div>
         <div className="bg-slate-50 rounded-lg p-10 mb-5">{overview}</div>
-        <div className="text-sm mb-5 grid grid-flow-col items-center justify-start">
-          <Rating />
-        </div>
-        <div className="mb-2">
-          <textarea
-            rows={3}
-            className="w-full focus:outline-0 border-2 border-solid border-slate-100 p-3 rounded-lg focus:border-blue-400 transition-all"
-            placeholder="Write a review"
-          />
-        </div>
-        <div className="grid justify-end mb-10">
-          <div className="bg-blue-400 text-white px-5 py-2 rounded-lg md:hover:bg-blue-500 cursor-pointer transition-all">
-            Add review
-          </div>
-        </div>
-        <div className="text-xl mb-5">Reviews :</div>
-        <Review />
-        <Review />
+        {isWatched && (
+          <>
+            <div className="text-sm mb-5 grid grid-flow-col items-center justify-start">
+              <Rating />
+            </div>
+            <div className="mb-2">
+              <textarea
+                rows={3}
+                value={textReview}
+                onChange={(e) => setTextReview(e.target.value)}
+                className="w-full focus:outline-0 border-2 border-solid border-slate-100 p-3 rounded-lg focus:border-blue-400 transition-all"
+                placeholder="Write a review"
+              />
+            </div>
+            <div className="grid justify-end mb-10">
+              <div
+                className="bg-blue-400 text-white px-5 py-2 rounded-lg md:hover:bg-blue-500 cursor-pointer transition-all"
+                onClick={handleAddReview}
+              >
+                Add review
+              </div>
+            </div>
+            <div className="text-xl mb-5">Reviews :</div>
+            {reviews.length > 0 ? (
+              reviews.map((review: IReview, index: number) => (
+                <Review key={index} props={review} />
+              ))
+            ) : (
+              <div className="text-sm grid justify-center items-center">
+                No reviews yet
+              </div>
+            )}
+          </>
+        )}
       </div>
     </>
   );

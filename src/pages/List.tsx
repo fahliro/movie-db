@@ -87,11 +87,17 @@ const List = (): JSX.Element => {
       {movies.length > 0 && renderCarousel()}
       <div className="md:p-10 md:mb-20 md:mx-0 md:mt-0 mx-5 mt-5 pb-28">
         <div className="mb-5 font-bold text-lg md:text-xl">Featured Movie</div>
-        <div className="grid grid-cols-2 md:grid-cols-4 md:gap-5 gap-4">
-          {movies.map((movie: IMovie, index: number) => (
-            <Card key={index} props={movie} />
-          ))}
-        </div>
+        {movies.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 md:gap-5 gap-4">
+            {movies.map((movie: IMovie, index: number) => (
+              <Card key={index} props={movie} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-sm grid justify-center items-center">
+            No movie available
+          </div>
+        )}
       </div>
     </>
   );

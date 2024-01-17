@@ -1,5 +1,5 @@
 export interface IMovie {
-    id: string,
+    id: number,
     title: string,
     release_date: string,
     overview: string,
@@ -8,5 +8,14 @@ export interface IMovie {
 }
 export interface IInitialState {
     movies: IMovie[],
-    movie: IMovie
+    movie: IMovie,
+    watched: number[]
+    reviews: IReview[]
+}
+
+export interface IReview {
+    idReview: number,
+    id: number,
+    date: string,
+    review: string,
 }

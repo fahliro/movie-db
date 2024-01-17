@@ -1,6 +1,7 @@
 import Star from "./Star";
 
 const Rating = (): JSX.Element => {
+  //skip this feature
   return (
     <>
       <div className="mr-3">Rate this movie :</div>

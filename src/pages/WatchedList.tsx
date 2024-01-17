@@ -1,7 +1,18 @@
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import Card from "../components/Card";
 import Header from "../components/Header";
+import { IMovie } from "../interfaces/Movies";
+import { RootState } from "../store";
 
 const WatchedList = (): JSX.Element => {
+  const movies = useSelector((state: RootState) => state.movies.movies);
+  const watched = useSelector((state: RootState) => state.movies.watched);
+
+  const watchedMovies = movies.filter((movie: IMovie) =>
+    watched.includes(movie.id)
+  );
+
   return (
     <>
       <div className="bg-blue-400 px-10 py-5">
@@ -20,12 +31,17 @@ const WatchedList = (): JSX.Element => {
             </Link>
           </div>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 md:gap-5 gap-4">
-          {/* <Card />
-          <Card />
-          <Card />
-          <Card /> */}
-        </div>
+        {watchedMovies.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 md:gap-5 gap-4">
+            {watchedMovies.map((movie: IMovie, index: number) => (
+              <Card key={index} props={movie} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-sm grid justify-center items-center">
+            No watched movie yet
+          </div>
+        )}
       </div>
     </>
   );

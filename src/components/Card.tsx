@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { DEFAULT_IMAGE_URL } from "../constants";
 import { ICard } from "../interfaces/Card";
-import Love from "./Love";
+import Favorite from "./Favorite";
 import Star from "./Star";
 
 const Card = ({
@@ -18,13 +18,13 @@ const Card = ({
             className="w-full h-40 bg-cover bg-center bg-no-repeat rounded-t-lg"
           >
             <div className="backdrop-brightness-50 h-full rounded-t-lg">
-              <div className="absolute right-5 bottom-5">
-                <Love />
+              <div className="absolute right-1 bottom-1 scale-75">
+                <Favorite id={id} />
               </div>
             </div>
           </div>
           <div className="p-3">
-            <div className="grid grid-flow-col justify-start gap-1 mb-2">
+            <div className="grid grid-flow-col justify-start gap-1">
               <Star />
               <Star />
               <Star />

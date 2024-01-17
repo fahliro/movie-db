@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { COUNTER } from "../constants/Counter"
+import { COUNTER } from "../constants"
 import { IInitialState } from "../interfaces/Counter"
 
 const initialState: IInitialState = {

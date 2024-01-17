@@ -1,0 +1,5 @@
+export const COUNTER = "counter"
+export const APP = "app"
+export const CAROUSEL = "carousel"
+export const DEFAULT_WIDTH = "768px"
+export const DEFAULT_HEIGHT = "1024px"

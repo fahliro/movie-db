@@ -1,12 +1,17 @@
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { DEFAULT_IMAGE_URL } from "../constants";
 import { ICard } from "../interfaces/Card";
+import { RootState } from "../store";
 import Favorite from "./Favorite";
-import Star from "./Star";
+import Stars from "./Stars";
 
 const Card = ({
   props: { id, title, overview, poster_path, release_date },
 }: ICard): JSX.Element => {
+  const watched = useSelector((state: RootState) => state.movies.watched);
+  const isWatched = watched.includes(id);
+
   return (
     <>
       <Link to={`/detail/${id}`}>
@@ -25,11 +30,7 @@ const Card = ({
           </div>
           <div className="p-3">
             <div className="grid grid-flow-col justify-start gap-1">
-              <Star />
-              <Star />
-              <Star />
-              <Star />
-              <Star />
+              <Stars disabled={!isWatched} movieId={id} />
             </div>
             <div className="font-bold text-sm truncate" title={title}>
               {title}

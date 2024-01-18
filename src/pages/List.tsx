@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "../components/Card";
 import Carousel from "../components/Carousel";
-import { IMovie } from "../interfaces/Movies";
-import { addMovies } from "../slices/Movies";
+import { IMovie } from "../interfaces/Movie";
+import { addMovies } from "../slices/Movie";
 import { RootState } from "../store";
 import { instance } from "../utils/api";
 
@@ -56,7 +56,7 @@ const List = (): JSX.Element => {
   const getMovies = (): void => {
     instance.get(`/movie/popular`).then((response) => {
       const results = response.data.results;
-      const items: IMovie = results.map((result: any) => {
+      const movies_: IMovie = results.map((result: any) => {
         const {
           id,
           title,
@@ -76,7 +76,7 @@ const List = (): JSX.Element => {
         };
       });
 
-      dispatch(addMovies({ movies: items }));
+      dispatch(addMovies(movies_));
     });
   };
 

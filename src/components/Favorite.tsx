@@ -1,6 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useDispatch, useSelector } from "react-redux";
-import { addWatched, removeWatched } from "../slices/Movies";
+import {
+  addWatched,
+  removeRateByMovieId,
+  removeReviewByMovieId,
+  removeWatched,
+} from "../slices/Movie";
 import { RootState } from "../store";
 import Love from "./Love";
 
@@ -10,14 +15,18 @@ const Favorite = ({ id }: { id: number }): JSX.Element => {
   const watched = useSelector((state: RootState) => state.movies.watched);
   const isWatched = watched.includes(id);
 
+  const handleRemoveWatched = (): void => {
+    dispatch(removeWatched(id));
+    dispatch(removeReviewByMovieId(id));
+    dispatch(removeRateByMovieId(id));
+  };
+
   const handleFavorite = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ): void => {
     e.preventDefault();
 
-    dispatch(
-      isWatched ? removeWatched({ watched: id }) : addWatched({ watched: id })
-    );
+    isWatched ? handleRemoveWatched() : dispatch(addWatched(id));
   };
 
   return (

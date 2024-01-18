@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Card from "../components/Card";
 import Header from "../components/Header";
-import { IMovie } from "../interfaces/Movies";
+import { IMovie } from "../interfaces/Movie";
 import { RootState } from "../store";
 
 const WatchedList = (): JSX.Element => {

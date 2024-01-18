@@ -6,8 +6,8 @@ import Carousel from "../components/Carousel";
 import Favorite from "../components/Favorite";
 import Rating from "../components/Rating";
 import Review from "../components/Review";
-import { IMovie, IReview } from "../interfaces/Movies";
-import { addMovie, addReview } from "../slices/Movies";
+import { IMovie, IReview } from "../interfaces/Movie";
+import { addMovie, addReview } from "../slices/Movie";
 import { RootState } from "../store";
 import { instance } from "../utils/api";
 
@@ -18,15 +18,15 @@ const Detail = (): JSX.Element => {
   const dispatch = useDispatch();
 
   const { id } = useParams();
-  const idNumber = Number(id);
+  const movieId = Number(id);
 
   const items = useSelector((state: RootState) => state.movies.reviews);
   const reviews = id
-    ? items.filter((item: IReview) => item.id === idNumber)
+    ? items.filter((item: IReview) => item.movieId === movieId)
     : [];
 
   const watched = useSelector((state: RootState) => state.movies.watched);
-  const isWatched = id ? watched.includes(idNumber) : false;
+  const isWatched = id ? watched.includes(movieId) : false;
 
   const [textReview, setTextReview] = useState<string>("");
 
@@ -35,7 +35,7 @@ const Detail = (): JSX.Element => {
       const { id, title, backdrop_path, poster_path, overview, release_date } =
         response.data;
 
-      const item: IMovie = {
+      const movie_: IMovie = {
         id,
         title,
         backdrop_path,
@@ -44,7 +44,7 @@ const Detail = (): JSX.Element => {
         release_date,
       };
 
-      dispatch(addMovie({ movie: item }));
+      dispatch(addMovie(movie_));
     });
   };
 
@@ -56,8 +56,8 @@ const Detail = (): JSX.Element => {
         addReview({
           review: textReview,
           date: new Date().toISOString(),
-          id: idNumber,
-          idReview: Math.random(),
+          movieId: movieId,
+          id: Math.random(),
         })
       );
       setTextReview("");

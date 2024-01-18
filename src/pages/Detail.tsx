@@ -114,7 +114,7 @@ const Detail = (): JSX.Element => {
               ))
             ) : (
               <div className="text-sm grid justify-center items-center">
-                No reviews yet
+                No review yet
               </div>
             )}
           </>

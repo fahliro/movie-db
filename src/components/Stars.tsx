@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { Suspense, lazy, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IRate } from "../interfaces/Movie";
 import { IHandleClick, IHandleHover, IStars } from "../interfaces/Star";
 import { addRate } from "../slices/Movie";
 import { RootState } from "../store";
-import Star from "./Star";
+import Loading from "./Loading";
+const Star = lazy(() => import("./Star"));
 
 const Stars = ({ disabled, movieId }: IStars): JSX.Element => {
   const rates: IRate[] = useSelector((state: RootState) => state.movies.rates);
@@ -53,7 +54,11 @@ const Stars = ({ disabled, movieId }: IStars): JSX.Element => {
     return stars;
   };
 
-  return <div className="text-xl grid grid-cols-5">{renderStars()}</div>;
+  return (
+    <Suspense fallback={<Loading />}>
+      <div className="text-xl grid grid-cols-5">{renderStars()}</div>
+    </Suspense>
+  );
 };
 
 export default Stars;

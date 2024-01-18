@@ -15,7 +15,7 @@ const WatchedList = (): JSX.Element => {
 
   return (
     <>
-      <div className="bg-blue-400 px-10 py-5">
+      <div className="bg-blue-400 px-5 md:px-10 py-5">
         <Header />
       </div>
       <div className="md:p-10 md:mb-32 md:mx-0 md:mt-0 mx-5 mt-5 pb-28">

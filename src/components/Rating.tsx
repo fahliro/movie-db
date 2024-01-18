@@ -11,9 +11,7 @@ const Rating = (): JSX.Element => {
   return (
     <Suspense fallback={<Loading />}>
       <div className="mr-3">Rate this movie :</div>
-      <div className="text-xl grid grid-cols-5 gap-1">
-        <Stars movieId={id} />
-      </div>
+      <Stars movieId={id} />
     </Suspense>
   );
 };

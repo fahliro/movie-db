@@ -13,7 +13,7 @@ import { instance } from "../utils/api";
 
 const Detail = (): JSX.Element => {
   const movie = useSelector((state: RootState) => state.movies.movie);
-  const { title, backdrop_path, overview } = movie;
+  const { title, backdrop_path, overview, release_date } = movie;
 
   const dispatch = useDispatch();
 
@@ -80,7 +80,10 @@ const Detail = (): JSX.Element => {
             {id && <Favorite id={Number(id)} />}
           </div>
         </div>
-        <div className="bg-slate-50 rounded-lg p-10 mb-5">{overview}</div>
+        <div className="bg-slate-50 rounded-lg p-10 mb-5">
+          <div className="text-xs font-bold mb-5">{release_date}</div>
+          <div>{overview}</div>
+        </div>
         {isWatched && (
           <>
             <div className="text-sm mb-5 grid grid-flow-col items-center justify-start">

@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Card from "../components/Card";
-import Carousel from "../components/Carousel";
-import { IMovie } from "../interfaces/Movies";
-import { addMovies } from "../slices/Movies";
+import Loading from "../components/Loading";
+import { IMovie } from "../interfaces/Movie";
+import { addMovies } from "../slices/Movie";
 import { RootState } from "../store";
 import { instance } from "../utils/api";
+const Card = lazy(() => import("../components/Card"));
+const Carousel = lazy(() => import("../components/Carousel"));
 
 const List = (): JSX.Element => {
   const movies = useSelector((state: RootState) => state.movies.movies);
@@ -56,7 +57,7 @@ const List = (): JSX.Element => {
   const getMovies = (): void => {
     instance.get(`/movie/popular`).then((response) => {
       const results = response.data.results;
-      const items: IMovie = results.map((result: any) => {
+      const movies_: IMovie = results.map((result: any) => {
         const {
           id,
           title,
@@ -76,14 +77,14 @@ const List = (): JSX.Element => {
         };
       });
 
-      dispatch(addMovies({ movies: items }));
+      dispatch(addMovies(movies_));
     });
   };
 
   useEffect(() => getMovies(), []);
 
   return (
-    <>
+    <Suspense fallback={<Loading />}>
       {movies.length > 0 && renderCarousel()}
       <div className="md:p-10 md:mb-20 md:mx-0 md:mt-0 mx-5 mt-5 pb-28">
         <div className="mb-5 font-bold text-lg md:text-xl">Featured Movie</div>
@@ -99,7 +100,7 @@ const List = (): JSX.Element => {
           </div>
         )}
       </div>
-    </>
+    </Suspense>
   );
 };
 

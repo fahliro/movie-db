@@ -1,32 +1,33 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import Carousel from "../components/Carousel";
-import Favorite from "../components/Favorite";
-import Rating from "../components/Rating";
-import Review from "../components/Review";
-import { IMovie, IReview } from "../interfaces/Movies";
-import { addMovie, addReview } from "../slices/Movies";
+import Loading from "../components/Loading";
+import { IMovie, IReview } from "../interfaces/Movie";
+import { addMovie, addReview } from "../slices/Movie";
 import { RootState } from "../store";
 import { instance } from "../utils/api";
+const Carousel = lazy(() => import("../components/Carousel"));
+const Favorite = lazy(() => import("../components/Favorite"));
+const Rating = lazy(() => import("../components/Rating"));
+const Review = lazy(() => import("../components/Review"));
 
 const Detail = (): JSX.Element => {
   const movie = useSelector((state: RootState) => state.movies.movie);
-  const { title, backdrop_path, overview } = movie;
+  const { title, backdrop_path, overview, release_date } = movie;
 
   const dispatch = useDispatch();
 
   const { id } = useParams();
-  const idNumber = Number(id);
+  const movieId = Number(id);
 
   const items = useSelector((state: RootState) => state.movies.reviews);
   const reviews = id
-    ? items.filter((item: IReview) => item.id === idNumber)
+    ? items.filter((item: IReview) => item.movieId === movieId)
     : [];
 
   const watched = useSelector((state: RootState) => state.movies.watched);
-  const isWatched = id ? watched.includes(idNumber) : false;
+  const isWatched = id ? watched.includes(movieId) : false;
 
   const [textReview, setTextReview] = useState<string>("");
 
@@ -35,7 +36,7 @@ const Detail = (): JSX.Element => {
       const { id, title, backdrop_path, poster_path, overview, release_date } =
         response.data;
 
-      const item: IMovie = {
+      const movie_: IMovie = {
         id,
         title,
         backdrop_path,
@@ -44,7 +45,7 @@ const Detail = (): JSX.Element => {
         release_date,
       };
 
-      dispatch(addMovie({ movie: item }));
+      dispatch(addMovie(movie_));
     });
   };
 
@@ -56,8 +57,8 @@ const Detail = (): JSX.Element => {
         addReview({
           review: textReview,
           date: new Date().toISOString(),
-          id: idNumber,
-          idReview: Math.random(),
+          movieId: movieId,
+          id: Math.random(),
         })
       );
       setTextReview("");
@@ -65,7 +66,7 @@ const Detail = (): JSX.Element => {
   };
 
   return (
-    <>
+    <Suspense fallback={<Loading />}>
       <Carousel title={title} backdrop_path={backdrop_path} />
       <div className="md:p-10 md:mb-32 md:mx-0 md:mt-0 mx-5 mt-5 pb-28">
         <div className="grid grid-cols-2 mb-8 md:mb-10">
@@ -80,7 +81,10 @@ const Detail = (): JSX.Element => {
             {id && <Favorite id={Number(id)} />}
           </div>
         </div>
-        <div className="bg-slate-50 rounded-lg p-10 mb-5">{overview}</div>
+        <div className="bg-slate-50 rounded-lg p-10 mb-5">
+          <div className="text-xs font-bold mb-5">{release_date}</div>
+          <div>{overview}</div>
+        </div>
         {isWatched && (
           <>
             <div className="text-sm mb-5 grid grid-flow-col items-center justify-start">
@@ -110,13 +114,13 @@ const Detail = (): JSX.Element => {
               ))
             ) : (
               <div className="text-sm grid justify-center items-center">
-                No reviews yet
+                No review yet
               </div>
             )}
           </>
         )}
       </div>
-    </>
+    </Suspense>
   );
 };
 

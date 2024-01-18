@@ -10,12 +10,19 @@ export interface IInitialState {
     movies: IMovie[],
     movie: IMovie,
     watched: number[]
-    reviews: IReview[]
+    reviews: IReview[],
+    rates: IRate[]
 }
 
 export interface IReview {
-    idReview: number,
     id: number,
+    movieId: number,
     date: string,
     review: string,
+}
+
+export interface IRate {
+    id: number,
+    movieId: number,
+    rate: number
 }

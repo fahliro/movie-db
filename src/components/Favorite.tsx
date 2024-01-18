@@ -1,8 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { Suspense, lazy } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addWatched, removeWatched } from "../slices/Movies";
+import {
+  addWatched,
+  removeRateByMovieId,
+  removeReviewByMovieId,
+  removeWatched,
+} from "../slices/Movie";
 import { RootState } from "../store";
-import Love from "./Love";
+import Loading from "./Loading";
+const Love = lazy(() => import("./Love"));
 
 const Favorite = ({ id }: { id: number }): JSX.Element => {
   const dispatch = useDispatch();
@@ -10,23 +17,29 @@ const Favorite = ({ id }: { id: number }): JSX.Element => {
   const watched = useSelector((state: RootState) => state.movies.watched);
   const isWatched = watched.includes(id);
 
+  const handleRemoveWatched = (): void => {
+    dispatch(removeWatched(id));
+    dispatch(removeReviewByMovieId(id));
+    dispatch(removeRateByMovieId(id));
+  };
+
   const handleFavorite = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ): void => {
     e.preventDefault();
 
-    dispatch(
-      isWatched ? removeWatched({ watched: id }) : addWatched({ watched: id })
-    );
+    isWatched ? handleRemoveWatched() : dispatch(addWatched(id));
   };
 
   return (
-    <div className="w-10 h-10 grid justify-center items-center relative">
-      <div className="w-10 h-10 bg-slate-50 peer rounded-full cursor-pointer"></div>
-      <div onClick={(e) => handleFavorite(e)}>
-        <Love isWatched={isWatched} />
+    <Suspense fallback={<Loading />}>
+      <div className="w-10 h-10 grid justify-center items-center relative">
+        <div className="w-10 h-10 bg-slate-50 peer rounded-full cursor-pointer"></div>
+        <div onClick={(e) => handleFavorite(e)}>
+          <Love isWatched={isWatched} />
+        </div>
       </div>
-    </div>
+    </Suspense>
   );
 };
 

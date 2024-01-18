@@ -1,9 +1,11 @@
+import { Suspense, lazy } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import Card from "../components/Card";
-import Header from "../components/Header";
-import { IMovie } from "../interfaces/Movies";
+import Loading from "../components/Loading";
+import { IMovie } from "../interfaces/Movie";
 import { RootState } from "../store";
+const Card = lazy(() => import("../components/Card"));
+const Header = lazy(() => import("../components/Header"));
 
 const WatchedList = (): JSX.Element => {
   const movies = useSelector((state: RootState) => state.movies.movies);
@@ -14,8 +16,8 @@ const WatchedList = (): JSX.Element => {
   );
 
   return (
-    <>
-      <div className="bg-blue-400 px-10 py-5">
+    <Suspense fallback={<Loading />}>
+      <div className="bg-blue-400 px-5 md:px-10 py-5">
         <Header />
       </div>
       <div className="md:p-10 md:mb-32 md:mx-0 md:mt-0 mx-5 mt-5 pb-28">
@@ -43,7 +45,7 @@ const WatchedList = (): JSX.Element => {
           </div>
         )}
       </div>
-    </>
+    </Suspense>
   );
 };
 

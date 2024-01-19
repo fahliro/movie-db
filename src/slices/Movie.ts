@@ -35,6 +35,9 @@ const moviesSlice = createSlice({
     
             state.movie = movie  
         },
+        removeMovie: (state: IInitialState): void => {
+            state.movie = initialMovie
+        },
         addWatched: (state: IInitialState, action): void => {
             const { payload } = action
             const watched: number = payload
@@ -92,5 +95,5 @@ const moviesSlice = createSlice({
     }
 })
 
-export const { addMovies, addMovie, addWatched, removeWatched, addReview, removeReview, removeReviewByMovieId, addRate, removeRateByMovieId } = moviesSlice.actions
+export const { addMovies, addMovie, removeMovie, addWatched, removeWatched, addReview, removeReview, removeReviewByMovieId, addRate, removeRateByMovieId } = moviesSlice.actions
 export default moviesSlice.reducer

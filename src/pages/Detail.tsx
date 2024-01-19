@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import Loading from "../components/Loading";
 import { IMovie, IReview } from "../interfaces/Movie";
-import { addMovie, addReview } from "../slices/Movie";
+import { addMovie, addReview, removeMovie } from "../slices/Movie";
 import { RootState } from "../store";
 import { instance } from "../utils/api";
 const Carousel = lazy(() => import("../components/Carousel"));
@@ -49,7 +49,12 @@ const Detail = (): JSX.Element => {
     });
   };
 
-  useEffect(() => getMovie(), [id]);
+  useEffect(() => {
+    getMovie();
+    return () => {
+      dispatch(removeMovie());
+    };
+  }, [id]);
 
   const handleAddReview = (): void => {
     if (textReview) {

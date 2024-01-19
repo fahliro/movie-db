@@ -7,7 +7,7 @@ const List = lazy(() => import("./pages/List"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const WatchedList = lazy(() => import("./pages/WatchedList"));
 
-const App = () => {
+const App = (): JSX.Element => {
   return (
     <BrowserRouter>
       <Routes>

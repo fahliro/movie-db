@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const NotFound = () => {
+const NotFound = (): JSX.Element => {
   return (
     <>
       <div className="grid h-screen justify-center content-center text-center">

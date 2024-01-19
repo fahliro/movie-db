@@ -56,7 +56,7 @@ const Detail = (): JSX.Element => {
       dispatch(
         addReview({
           review: textReview,
-          date: new Date().toISOString(),
+          date: new Date().toISOString().substring(0, 10),
           movieId: movieId,
           id: Math.random(),
         })

@@ -22,7 +22,11 @@ const Carousel = ({ backdrop_path, title }: ICarousel): JSX.Element => {
         <div className="backdrop-brightness-[35%] h-full md:px-10 md:pb-20 px-5 pb-16 pt-5 md:pt-5">
           <Header />
           <div className="text-white grid content-end h-full">
-            <div className="text-3xl md:text-5xl font-bold mb-1">
+            <div
+              className={`text-3xl md:text-5xl font-bold ${
+                hasSubtitle && "mb-1"
+              }`}
+            >
               {hasSubtitle ? ogTitle : title}
             </div>
             {hasSubtitle && (

@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Suspense, lazy, useEffect, useState } from "react";
+import { UnknownAction } from "@reduxjs/toolkit";
+import { Dispatch, Suspense, lazy, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import Loading from "../components/Loading";
@@ -7,19 +8,19 @@ import { IMovie, IReview } from "../interfaces/Movie";
 import { addMovie, addReview, removeMovie } from "../slices/Movie";
 import { RootState } from "../store";
 import { instance } from "../utils/api";
+const Watched = lazy(() => import("../components/Watched"));
 const Carousel = lazy(() => import("../components/Carousel"));
-const Favorite = lazy(() => import("../components/Favorite"));
 const Rating = lazy(() => import("../components/Rating"));
 const Review = lazy(() => import("../components/Review"));
 
 const Detail = (): JSX.Element => {
-  const movie = useSelector((state: RootState) => state.movies.movie);
+  const movie: IMovie = useSelector((state: RootState) => state.movies.movie);
   const { title, backdrop_path, overview, release_date } = movie;
 
-  const dispatch = useDispatch();
+  const dispatch: Dispatch<UnknownAction> = useDispatch();
 
   const { id } = useParams();
-  const movieId = Number(id);
+  const movieId: number = Number(id);
 
   const items = useSelector((state: RootState) => state.movies.reviews);
   const reviews = id
@@ -83,7 +84,7 @@ const Detail = (): JSX.Element => {
             </Link>
           </div>
           <div className="grid justify-end items-center">
-            {id && <Favorite id={Number(id)} />}
+            {movieId && <Watched id={movieId} />}
           </div>
         </div>
         <div className="bg-slate-50 rounded-lg p-10 mb-5">

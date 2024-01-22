@@ -5,14 +5,16 @@ import { DEFAULT_IMAGE_URL } from "../constants";
 import { ICard } from "../interfaces/Card";
 import { RootState } from "../store";
 import Loading from "./Loading";
-const Favorite = lazy(() => import("./Favorite"));
+const Watched = lazy(() => import("./Watched"));
 const Stars = lazy(() => import("./Stars"));
 
 const Card = ({
   props: { id, title, overview, poster_path, release_date },
 }: ICard): JSX.Element => {
-  const watched = useSelector((state: RootState) => state.movies.watched);
-  const isWatched = watched.includes(id);
+  const watched: number[] = useSelector(
+    (state: RootState) => state.movies.watched
+  );
+  const isWatched: boolean = watched.includes(id);
 
   return (
     <Suspense fallback={<Loading />}>
@@ -26,7 +28,7 @@ const Card = ({
           >
             <div className="backdrop-brightness-50 h-full rounded-t-lg">
               <div className="absolute right-1 bottom-1 scale-75">
-                <Favorite id={id} />
+                <Watched id={id} />
               </div>
             </div>
           </div>

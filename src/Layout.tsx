@@ -23,7 +23,7 @@ const Layout = (): JSX.Element => {
 
   return (
     <div
-      className={`md:grid md:justify-center md:h-screen bg-slate-100 overflow-auto text-slate-500`}
+      className={`md:grid md:justify-center h-screen md:items-center bg-slate-100 overflow-auto text-slate-500`}
     >
       <div className={`bg-white md:w-[768px] relative`}>
         {network && renderNetworkMessage()}
